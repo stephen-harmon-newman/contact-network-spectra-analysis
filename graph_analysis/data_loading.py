@@ -255,8 +255,8 @@ def load_date_interval(state, start_date, end_date, delay=False):  # Load data f
         except StopIteration:
             break
         day_dfs = []
-        BUCKET = 'yse-bioecon-um2-dc'
-        state_day = 'third/state=' + (state_dict[state] if len(state) > 2 else state) + '/local_date=' + cd
+        BUCKET = 'yse-bioecon-um3-dc'
+        state_day = 'um2-dc/third/state=' + (state_dict[state] if len(state) > 2 else state) + '/local_date=' + cd
         try:
             state_day_keys = fcombo.get_s3_keys(BUCKET, state_day)
         except:
@@ -313,7 +313,7 @@ def left_looking_sample(arr, step=7, num_samples=4):
     """
     Returns an array of the same data, but with last dimension a timeshift on the data (i.e. instead of having an eigenvalue, we have a vector of the eigenvalue at that time step, STEP time before it, 2*STEP time before it, and so on). If a datapoint is unknown, returns the earliest datapoint known there.
     """
-    samp_arr = np.zeros(shape = arr.shape + (num_samples,))
+    samp_arr = np.empty(shape = arr.shape + (num_samples,))
     for i in range(num_samples):
         samp_arr[i * step:, ..., i] = arr[:-i * step if i > 0 else None]
     return samp_arr
